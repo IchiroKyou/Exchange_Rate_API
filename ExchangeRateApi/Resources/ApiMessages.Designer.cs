@@ -61,6 +61,69 @@ namespace ExchangeRateApi.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error fetching exchange rate: {0}.
+        /// </summary>
+        internal static string Error_AlphaVantage_HttpRequest {
+            get {
+                return ResourceManager.GetString("Error_AlphaVantage_HttpRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exchange for {0}/{1} was not found..
+        /// </summary>
+        internal static string Error_AlphaVantage_NotFound {
+            get {
+                return ResourceManager.GetString("Error_AlphaVantage_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error parsing JSON: {0}.
+        /// </summary>
+        internal static string Error_AlphaVantage_ParsingJson {
+            get {
+                return ResourceManager.GetString("Error_AlphaVantage_ParsingJson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unexpected error occurred: {0}.
+        /// </summary>
+        internal static string Error_AlphaVantage_UnexpectedException {
+            get {
+                return ResourceManager.GetString("Error_AlphaVantage_UnexpectedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The API key for {0} was not found in the environment variable!.
+        /// </summary>
+        internal static string Error_ApiKeyNotFound {
+            get {
+                return ResourceManager.GetString("Error_ApiKeyNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Key {0} in appsettings not found!.
+        /// </summary>
+        internal static string Error_EnvKeyNotFound {
+            get {
+                return ResourceManager.GetString("Error_EnvKeyNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The exchange rate between {0} and {1} was not found!.
+        /// </summary>
+        internal static string Exception_ExchangeRateNotFound_Message {
+            get {
+                return ResourceManager.GetString("Exception_ExchangeRateNotFound_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid currency code format. Must be 3 letters.a.
         /// </summary>
         internal static string Validation_CurrencyCode_InvalidCodeFormat {
