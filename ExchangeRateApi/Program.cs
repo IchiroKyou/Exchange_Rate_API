@@ -1,5 +1,8 @@
 using ExchangeRateApi.Data;
 using ExchangeRateApi.Filters;
+using ExchangeRateApi.Messaging;
+using ExchangeRateApi.Messaging.Interfaces;
+using ExchangeRateApi.Models.Dtos;
 using ExchangeRateApi.Models.MappingProfiles;
 using ExchangeRateApi.Services;
 using ExchangeRateApi.Services.Interfaces;
@@ -11,9 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ExchangeRateApiDbContext>();
 builder.Services.AddHttpClient(); // Inject httpclient for the AlphaVantageService
-builder.Services.AddControllers(options => options.Filters.Add(new ValidateModelStateAttribute())); //Adds controllers and a filter for validating the model before the action is executed.
+builder.Services.AddControllers(options => options.Filters.Add(new ValidateModelStateAttribute())); // Adds controllers and a filter for validating the model before the action is executed.
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(ExchangeRateProfile)); // Adds automapper for the DTOs
+builder.Services.AddScoped<IMessageQueuePublisher<ExchangeRateDto>, ExchangeRatePublisher>(); // Inject mq publisher
 builder.Services.AddScoped<IAlphaVantageService, AlphaVantageService>(); // Inject AlphaVantageService
 builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>(); // Inject ExchangeRateService
 

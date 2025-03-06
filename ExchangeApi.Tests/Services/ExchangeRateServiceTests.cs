@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using ExchangeRateApi.Data;
+using ExchangeRateApi.Messaging;
+using ExchangeRateApi.Messaging.Interfaces;
 using ExchangeRateApi.Models;
 using ExchangeRateApi.Models.Dtos;
 using ExchangeRateApi.Services;
@@ -65,12 +67,14 @@ namespace ExchangeApi.Tests.Services
                                                                         ))).Returns(expectedExchangeRateDto);
 
             Mock<IAlphaVantageService> alphaVantageServiceMock = MockHelpers.CreateAlphaVantageServiceMock(expectedExchangeRateDto);
+            Mock<IMessageQueuePublisher<ExchangeRateDto>> exchangeRatePublisherMock = new Mock<IMessageQueuePublisher<ExchangeRateDto>>();
+            exchangeRatePublisherMock.Setup(ep => ep.PublishMessageAsync(It.IsAny<ExchangeRateDto>())).Returns(Task.CompletedTask);
 
             #endregion
 
             #region Act
 
-            IExchangeRateService exchangeRateService = new ExchangeRateService(logger, context, mapperMock.Object, alphaVantageServiceMock.Object);
+            IExchangeRateService exchangeRateService = new ExchangeRateService(logger, context, mapperMock.Object, alphaVantageServiceMock.Object, exchangeRatePublisherMock.Object);
             ExchangeRateDto exchangeRateServiceResponse = await exchangeRateService.GetExchangeRateAsync(fromCurrency, toCurrency);
 
             #endregion
@@ -135,6 +139,8 @@ namespace ExchangeApi.Tests.Services
                                                                         ))).Returns(expectedExchangeRateDto);
 
             Mock<IAlphaVantageService> alphaVantageServiceMock = MockHelpers.CreateAlphaVantageServiceMock(expectedExchangeRateDto);
+            Mock<IMessageQueuePublisher<ExchangeRateDto>> exchangeRatePublisherMock = new Mock<IMessageQueuePublisher<ExchangeRateDto>>();
+            exchangeRatePublisherMock.Setup(ep => ep.PublishMessageAsync(It.IsAny<ExchangeRateDto>())).Returns(Task.CompletedTask);
 
             #endregion
 
@@ -142,7 +148,7 @@ namespace ExchangeApi.Tests.Services
 
             ExchangeRateApiDbContext context = _databaseFixture.GetDbContext();
 
-            IExchangeRateService exchangeRateService = new ExchangeRateService(logger, context, mapperMock.Object, alphaVantageServiceMock.Object);
+            IExchangeRateService exchangeRateService = new ExchangeRateService(logger, context, mapperMock.Object, alphaVantageServiceMock.Object, exchangeRatePublisherMock.Object);
             ExchangeRateDto exchangeRateServiceResponse = await exchangeRateService.GetExchangeRateAsync(fromCurrency, toCurrency);
 
             #endregion
@@ -200,11 +206,12 @@ namespace ExchangeApi.Tests.Services
                                                                 rateDto.Rate == newExchangeRateDto.Rate
                                                             ))).Returns(expectedExchangeRate);
             IAlphaVantageService alphaVantageService = Mock.Of<IAlphaVantageService>();
-
+            Mock<IMessageQueuePublisher<ExchangeRateDto>> exchangeRatePublisherMock = new Mock<IMessageQueuePublisher<ExchangeRateDto>>();
+            exchangeRatePublisherMock.Setup(ep => ep.PublishMessageAsync(It.IsAny<ExchangeRateDto>())).Returns(Task.CompletedTask);
 
             ExchangeRateApiDbContext context = _databaseFixture.GetDbContext();
 
-            ExchangeRateService exchangeRateService = new ExchangeRateService(logger, context, mapperMock.Object, alphaVantageService);
+            ExchangeRateService exchangeRateService = new ExchangeRateService(logger, context, mapperMock.Object, alphaVantageService, exchangeRatePublisherMock.Object);
 
             #endregion
 

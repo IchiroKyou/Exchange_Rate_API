@@ -7,6 +7,7 @@ using ExchangeRateApi.Resources;
 using ExchangeRateApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Humanizer;
+using ExchangeRateApi.Messaging.Interfaces;
 
 namespace ExchangeRateApi.Services
 {
@@ -16,15 +17,16 @@ namespace ExchangeRateApi.Services
         private readonly ExchangeRateApiDbContext _context;
         private readonly IMapper _mapper;
         private readonly IAlphaVantageService _alphaVantageService;
-
+        private readonly IMessageQueuePublisher<ExchangeRateDto> _exchangeRatePublisher;
         private const int CONCURRENCY_MAX_RETRIES = 5;
 
-        public ExchangeRateService(ILogger<ExchangeRateService> logger, ExchangeRateApiDbContext context, IMapper mapper, IAlphaVantageService alphaVantageService)
+        public ExchangeRateService(ILogger<ExchangeRateService> logger, ExchangeRateApiDbContext context, IMapper mapper, IAlphaVantageService alphaVantageService, IMessageQueuePublisher<ExchangeRateDto> exchangeRatePublisher)
         {
             _logger = logger;
             _context = context;
             _mapper = mapper;
             _alphaVantageService = alphaVantageService;
+            _exchangeRatePublisher = exchangeRatePublisher;
         }
 
         public async Task<ExchangeRateDto> GetExchangeRateAsync(string fromCurrency, string toCurrency)
@@ -43,7 +45,8 @@ namespace ExchangeRateApi.Services
                     _context.ExchangeRates.Add(exchangeRate);
                     await _context.SaveChangesAsync();
 
-                    // TODO: Fire event in messaging queue system (e.g. RabbitMQ)
+                    await PublishCreateToMqAsync(exchangeRateDto);
+
                     return exchangeRateDto;
                 }
 
@@ -83,6 +86,8 @@ namespace ExchangeRateApi.Services
 
                 _context.ExchangeRates.Add(exchangeRate);
                 await _context.SaveChangesAsync();
+
+                await PublishCreateToMqAsync(exchangeRateDto);
 
                 return exchangeRateDto;
             }
@@ -197,5 +202,7 @@ namespace ExchangeRateApi.Services
                 throw;
             }
         }
+
+        private async Task PublishCreateToMqAsync(ExchangeRateDto exchangeRateDto) => await _exchangeRatePublisher.PublishMessageAsync(exchangeRateDto);
     }
 }

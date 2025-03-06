@@ -1,4 +1,5 @@
-﻿using ExchangeRateApi.Models;
+﻿using ExchangeRateApi.Exceptions;
+using ExchangeRateApi.Models;
 using ExchangeRateApi.Resources;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,8 @@ namespace ExchangeRateApi.Data
     {
         private readonly IConfiguration configuration;
         private readonly ILoggerFactory loggerFactory;
+
+        private const string EXCHANGE_API_SETTINGS_KEY = "EnvVarKeys:ExchangeApiDb";
 
         public DbSet<ExchangeRate> ExchangeRates { get; set; }
 
@@ -56,37 +59,51 @@ namespace ExchangeRateApi.Data
         /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseLoggerFactory(loggerFactory);
-
-            // In case this is a in-memory unit test
-            if (optionsBuilder.IsConfigured)
+            try
             {
-                return;
+                optionsBuilder.UseLoggerFactory(loggerFactory);
+
+                // In case this is a in-memory unit test
+                if (optionsBuilder.IsConfigured)
+                {
+                    return;
+                }
+
+                var exchangeApiDbConnectionKey = configuration.GetValue<string>(EXCHANGE_API_SETTINGS_KEY);
+
+                // If the environment variable key is not in the appsettings.json, stop program from running
+                if (string.IsNullOrEmpty(exchangeApiDbConnectionKey))
+                {
+                    throw new EnvKeySettingsNotFoundException(EXCHANGE_API_SETTINGS_KEY);
+                }
+
+                // Retrieves the connection string from a env variable (different for each env)
+                var connectionString = Environment.GetEnvironmentVariable(exchangeApiDbConnectionKey);
+
+                // If the connection string is not set in the environment variable, stop program from running
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    throw new EnvVariableNotFoundException(exchangeApiDbConnectionKey);
+                }
+
+                loggerFactory.CreateLogger<ExchangeRateApiDbContext>().LogInformation(ApiMessages.Info_ConnectionStringFound.FormatWith(exchangeApiDbConnectionKey));
+                optionsBuilder.UseSqlServer(connectionString);
             }
-
-            string settingsKey = "EnvVarKeys:ExchangeApiDb";
-            var exchangeApiDbConnectionKey = configuration.GetValue<string>(settingsKey);
-
-            // If the environment variable key is not in the appsettings.json, stop program from running
-            if (string.IsNullOrEmpty(exchangeApiDbConnectionKey))
+            catch(EnvKeySettingsNotFoundException ex) 
+            { 
+                loggerFactory.CreateLogger<ExchangeRateApiDbContext>().LogError(ex, ex.Message);
+                throw;
+            }
+            catch(EnvVariableNotFoundException ex) 
+            { 
+                loggerFactory.CreateLogger<ExchangeRateApiDbContext>().LogError(ex, ex.Message);
+                throw;
+            }
+            catch(Exception ex) 
             {
-                string errorMessage = ApiMessages.Error_EnvKeyNotFound.FormatWith(settingsKey);
-                loggerFactory.CreateLogger<ExchangeRateApiDbContext>().LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
+                loggerFactory.CreateLogger<ExchangeRateApiDbContext>().LogError(ex, ex.Message);
+                throw; 
             }
-
-            // Retrieves the connection string from a env variable (different for each env)
-            var connectionString = Environment.GetEnvironmentVariable(exchangeApiDbConnectionKey);
-
-            // If the connection string is not set in the environment variable, stop program from running
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                loggerFactory.CreateLogger<ExchangeRateApiDbContext>().LogError(ApiMessages.Error_ConnectionStringNotFound.FormatWith(exchangeApiDbConnectionKey));
-                throw new InvalidOperationException("");
-            }
-
-            loggerFactory.CreateLogger<ExchangeRateApiDbContext>().LogInformation(ApiMessages.Info_ConnectionStringFound.FormatWith(exchangeApiDbConnectionKey));
-            optionsBuilder.UseSqlServer(connectionString);
         }
     }
 }
