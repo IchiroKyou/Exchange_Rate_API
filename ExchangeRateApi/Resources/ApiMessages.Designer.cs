@@ -196,11 +196,29 @@ namespace ExchangeRateApi.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was a concurrency issue trying to update exchange rate between {0} and {1}..
+        /// </summary>
+        internal static string Error_ExchangeRatesController_Put_ConcurrencyError {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRatesController_Put_ConcurrencyError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was an error trying to update exchange rate between {0} and {1}..
         /// </summary>
         internal static string Error_ExchangeRatesController_Put_DefaultError {
             get {
                 return ResourceManager.GetString("Error_ExchangeRatesController_Put_DefaultError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update retry limit reached for the exchage between {0} and {1}..
+        /// </summary>
+        internal static string Error_ExchangeRatesController_Put_RetryLimitExceeded {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRatesController_Put_RetryLimitExceeded", resourceCulture);
             }
         }
         

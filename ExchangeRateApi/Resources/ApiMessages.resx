@@ -162,8 +162,14 @@
   <data name="Error_ExchangeRatesController_Post_DefaultError" xml:space="preserve">
     <value>There was an error creating an exchage rate between {0} and {1}.</value>
   </data>
+  <data name="Error_ExchangeRatesController_Put_ConcurrencyError" xml:space="preserve">
+    <value>There was a concurrency issue trying to update exchange rate between {0} and {1}.</value>
+  </data>
   <data name="Error_ExchangeRatesController_Put_DefaultError" xml:space="preserve">
     <value>There was an error trying to update exchange rate between {0} and {1}.</value>
+  </data>
+  <data name="Error_ExchangeRatesController_Put_RetryLimitExceeded" xml:space="preserve">
+    <value>Update retry limit reached for the exchage between {0} and {1}.</value>
   </data>
   <data name="Error_ExchangeRatesController_RateNotFound" xml:space="preserve">
     <value>Exchange for {0}/{1} was not found.</value>

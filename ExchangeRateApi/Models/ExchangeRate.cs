@@ -58,5 +58,8 @@ namespace ExchangeRateApi.Models
         /// </summary>
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime LastUpdate { get; set; }
+
+        [Timestamp]
+        public byte[] Version { get; set; }
     }
 }

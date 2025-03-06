@@ -17,6 +17,8 @@ namespace ExchangeRateApi.Services
         private readonly IMapper _mapper;
         private readonly IAlphaVantageService _alphaVantageService;
 
+        private const int CONCURRENCY_MAX_RETRIES = 5;
+
         public ExchangeRateService(ILogger<ExchangeRateService> logger, ExchangeRateApiDbContext context, IMapper mapper, IAlphaVantageService alphaVantageService)
         {
             _logger = logger;
@@ -78,7 +80,6 @@ namespace ExchangeRateApi.Services
                 }
 
                 var exchangeRate = _mapper.Map<ExchangeRate>(exchangeRateDto);
-                exchangeRate.LastUpdate = DateTime.UtcNow;
 
                 _context.ExchangeRates.Add(exchangeRate);
                 await _context.SaveChangesAsync();
@@ -107,6 +108,8 @@ namespace ExchangeRateApi.Services
 
         public async Task<ExchangeRateDto> UpdateExchangeRateAsync(ExchangeRateDto exchangeRateDto)
         {
+            int concurrencyRetryCount = 0;
+
             try
             {
                 // Here we have an added roundtrip to the database because we are not providing any primary key.
@@ -121,9 +124,27 @@ namespace ExchangeRateApi.Services
                 }
 
                 _mapper.Map(exchangeRateDto, exchangeRate);
-                exchangeRate.LastUpdate = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
 
+                return exchangeRateDto;
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Retries CONCURRENCY_MAX_RETRIES times
+                if (concurrencyRetryCount++ > CONCURRENCY_MAX_RETRIES)
+                {
+                    _logger.LogError(ApiMessages.Error_ExchangeRatesController_Put_RetryLimitExceeded
+                        .FormatWith(exchangeRateDto.FromCurrency, exchangeRateDto.ToCurrency, CONCURRENCY_MAX_RETRIES));
+                    throw;
+                }
+
+                _logger.LogWarning(ex, ApiMessages.Error_ExchangeRatesController_Put_ConcurrencyError
+                    .FormatWith(exchangeRateDto.FromCurrency, exchangeRateDto.ToCurrency));
+
+                var entry = ex.Entries.Single();
+                await entry.ReloadAsync();
+
+                _mapper.Map(exchangeRateDto, entry.Entity);
                 return exchangeRateDto;
             }
             catch (DbUpdateException ex)

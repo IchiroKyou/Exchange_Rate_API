@@ -154,6 +154,15 @@ namespace ExchangeRateApi.Controllers
                 };
                 return NotFound(responseDto);
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                responseDto.Status = HttpStatusCode.InternalServerError;
+                responseDto.Errors = new List<string> {
+                    ApiMessages.Error_ExchangeRatesController_Put_DefaultError
+                    .FormatWith(exchangeRateDto.FromCurrency, exchangeRateDto.ToCurrency)
+                };
+                return StatusCode(500, responseDto);
+            }
             catch (DbUpdateException)
             {
                 responseDto.Status = HttpStatusCode.InternalServerError;
