@@ -1,6 +1,8 @@
 ﻿using ExchangeRateApi.Models.Attributes;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExchangeRateApi.Models
 {
@@ -54,6 +56,7 @@ namespace ExchangeRateApi.Models
         /// <summary>
         /// Last time this exchange rate was updated.
         /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime LastUpdate { get; set; }
     }
 }

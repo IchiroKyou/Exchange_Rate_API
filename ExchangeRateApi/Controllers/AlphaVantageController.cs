@@ -21,12 +21,10 @@ namespace ExchangeRateApi.Controllers
     public class AlphaVantageController : ControllerBase
     {
         private readonly IAlphaVantageService _alphaVantageService;
-        private readonly IMapper _mapper;
 
-        public AlphaVantageController(IAlphaVantageService alphaVantageService, IMapper mapper)
+        public AlphaVantageController(IAlphaVantageService alphaVantageService)
         {
             _alphaVantageService = alphaVantageService;
-            _mapper = mapper;
         }
 
         /// <summary>
@@ -42,7 +40,7 @@ namespace ExchangeRateApi.Controllers
         ///   <response code="500">If an unexpected error occurs.</response>
         /// </returns>
         [HttpGet("{from}/{to}")]
-        public async Task<ActionResult<ResponseDto<ExchangeRateDto>>> GetExchangeRate([CurrencyCode] string from, [CurrencyCode] string to)
+        public async Task<ActionResult<ResponseDto<ExchangeRateDto>>> GetExchangeRateAsync([CurrencyCode] string from, [CurrencyCode] string to)
         {
             ResponseDto<ExchangeRateDto> responseDto = new();
 

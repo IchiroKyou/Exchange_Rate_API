@@ -106,6 +106,15 @@ namespace ExchangeRateApi.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection string for {0} not found!.
+        /// </summary>
+        internal static string Error_ConnectionStringNotFound {
+            get {
+                return ResourceManager.GetString("Error_ConnectionStringNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Key {0} in appsettings not found!.
         /// </summary>
         internal static string Error_EnvKeyNotFound {
@@ -115,11 +124,110 @@ namespace ExchangeRateApi.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The exchange rate between {0} and {1} already exists..
+        /// </summary>
+        internal static string Error_ExchangeRateAlreadyExists {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRateAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred when trying to update the database: {0}.
+        /// </summary>
+        internal static string Error_ExchangeRateController_DatabaseUpdate {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRateController_DatabaseUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not delete exchange rate between {0} and {1}: exchange rate not found..
+        /// </summary>
+        internal static string Error_ExchangeRateController_Delete_ExchangeRateNotFound {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRateController_Delete_ExchangeRateNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while trying to fetch the exchange rate..
+        /// </summary>
+        internal static string Error_ExchangeRateController_Get_DefaultError {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRateController_Get_DefaultError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update exchange rate between {0} and {1}: exchange rate not found..
+        /// </summary>
+        internal static string Error_ExchangeRateController_Put_ExchangeRateNotFound {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRateController_Put_ExchangeRateNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error deleting exchange rate between {0} and {1}..
+        /// </summary>
+        internal static string Error_ExchangeRatesController_Delete_DefaultError {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRatesController_Delete_DefaultError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error when trying to call AlphaVantage API: {0}.
+        /// </summary>
+        internal static string Error_ExchangeRatesController_Error_Contacting_AlphaVantage {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRatesController_Error_Contacting_AlphaVantage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error creating an exchage rate between {0} and {1}..
+        /// </summary>
+        internal static string Error_ExchangeRatesController_Post_DefaultError {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRatesController_Post_DefaultError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error trying to update exchange rate between {0} and {1}..
+        /// </summary>
+        internal static string Error_ExchangeRatesController_Put_DefaultError {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRatesController_Put_DefaultError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exchange for {0}/{1} was not found..
+        /// </summary>
+        internal static string Error_ExchangeRatesController_RateNotFound {
+            get {
+                return ResourceManager.GetString("Error_ExchangeRatesController_RateNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The exchange rate between {0} and {1} was not found!.
         /// </summary>
         internal static string Exception_ExchangeRateNotFound_Message {
             get {
                 return ResourceManager.GetString("Exception_ExchangeRateNotFound_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection string for {0} found!.
+        /// </summary>
+        internal static string Info_ConnectionStringFound {
+            get {
+                return ResourceManager.GetString("Info_ConnectionStringFound", resourceCulture);
             }
         }
         
