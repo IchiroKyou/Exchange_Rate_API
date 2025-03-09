@@ -197,7 +197,7 @@ namespace ExchangeRateApi.Controllers
         /// <response code="204">No Content. The exchange rate was successfully deleted.</response>
         /// <response code="404">Not Found. The exchange rate with the specified currencies was not found.</response>
         /// <response code="500">Internal Server Error. An unexpected error occurred during deletion.</response>
-        [HttpDelete("{from}/{to}")]
+        [HttpDelete("{fromCurrency}/{toCurrency}")]
         public async Task<IActionResult> DeleteExchangeRate([CurrencyCode] string fromCurrency, [CurrencyCode] string toCurrency)
         {
             ResponseDto<ExchangeRateDto> responseDto = new();
