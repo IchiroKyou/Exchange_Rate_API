@@ -40,6 +40,26 @@ Run the following command to apply the database migrations:
 `dotnet build`
 `dotnet run`
 
+## How to use
+Either launch the application and then use some tool like <em>Postman</em> or <em>Insomnia</em>, or launch the application and access the URL followed by <em>/swagger</em>.
+For example: `https://localhost:50189/swagger`
+If you are using Visual Studio, you can also update your <em>launchSettings.json</em> to include a <em>launchUrl</em> with <em>swagger</em>:
+```
+{
+  "profiles": {
+    "ExchangeRateApi": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:50189;http://localhost:50190",
+      "launchUrl": "swagger"
+    }
+  }
+}
+```
+
 ## Additional Information
 - Steps [1](#1-clone-the-repository), [2](#2-restore-nuget-packages), [4](#4-apply-database-migrations), and [5](#5-build-and-run) can be simplified if using Visual Studio.
 - Unit tests can be run in Visual Studio.
