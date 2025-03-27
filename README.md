@@ -1,4 +1,4 @@
-# ExchangeRateApi
+# Exchange Rate API
 
 ## Overview
 ExchangeRateApi is a ASP.NET Core Web API for managing exchange rates between different currencies.
